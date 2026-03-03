@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile_user.get_display_name }} | MusicRate{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Profile header -->
+    <div class="bg-dark-800 rounded-2xl p-8 border border-dark-600 mb-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+            <!-- Avatar -->
+            <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-dark-700 flex-shrink-0">
+                {% if profile_user.avatar %}
+                    <img src="{{ profile_user.avatar.url }}" alt="{{ profile_user.username }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full bg-accent flex items-center justify-center text-dark-900 text-4xl font-bold">
+                        {{ profile_user.username|first|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Info -->
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-2xl md:text-3xl font-bold mb-2">{{ profile_user.get_display_name }}</h1>
+                <p class="text-gray-500 mb-1">@{{ profile_user.username }}</p>
+                
+                {% if profile_user.bio %}
+                    <p class="text-gray-400 mt-4 max-w-xl">{{ profile_user.bio }}</p>
+                {% endif %}
+                
+                <!-- Stats -->
+                <div class="flex flex-wrap justify-center md:justify-start gap-6 mt-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent">{{ review_count }}</div>
+                        <div class="text-sm text-gray-500">Рецензий</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent">{{ profile_user.points }}</div>
+                        <div class="text-sm text-gray-500">Очков репутации</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent">
+                            {% if reviews %}
+                                {% with avg_score=reviews.0.total_score %}
+                                    {% for review in reviews %}
+                                        {% if forloop.first %}
+                                            {{ review.total_score }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                                -
+                            {% else %}
+                                -
+                            {% endif %}
+                        </div>
+                        <div class="text-sm text-gray-500">Последняя оценка</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reviews section -->
+    <div>
+        <h2 class="text-2xl font-bold mb-6">Рецензии пользователя</h2>
+        
+        {% if reviews %}
+            <div class="space-y-6">
+                {% for review in reviews %}
+                    <div class="bg-dark-800 rounded-2xl p-6 border border-dark-600">
+                        <!-- Release info -->
+                        <a href="{{ review.release.get_absolute_url }}" class="flex items-center space-x-4 mb-4 hover:opacity-80 transition-opacity">
+                            <div class="w-16 h-16 rounded-xl overflow-hidden bg-dark-700 flex-shrink-0">
+                                {% if review.release.cover %}
+                                    <img src="{{ review.release.cover.url }}" alt="{{ review.release.title }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">{{ review.release.title }}</h3>
+                                <p class="text-gray-400">{{ review.release.artist.name }}</p>
+                                <div class="flex items-center space-x-2 text-sm text-gray-500 mt-1">
+                                    <span class="uppercase">{{ review.release.get_release_type_display }}</span>
+                                    <span>•</span>
+                                    <span>{{ review.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <!-- Score breakdown -->
+                        <div class="grid grid-cols-5 gap-2 mb-4">
+                            <div class="text-center p-2 bg-dark-700 rounded-lg">
+                                <div class="text-xs text-gray-500 mb-1">Рифмы</div>
+                                <div class="font-bold text-accent">{{ review.rhymes }}</div>
+                            </div>
+                            <div class="text-center p-2 bg-dark-700 rounded-lg">
+                                <div class="text-xs text-gray-500 mb-1">Структура</div>
+                                <div class="font-bold text-accent">{{ review.structure }}</div>
+                            </div>
+                            <div class="text-center p-2 bg-dark-700 rounded-lg">
+                                <div class="text-xs text-gray-500 mb-1">Стиль</div>
+                                <div class="font-bold text-accent">{{ review.style }}</div>
+                            </div>
+                            <div class="text-center p-2 bg-dark-700 rounded-lg">
+                                <div class="text-xs text-gray-500 mb-1">Харизма</div>
+                                <div class="font-bold text-accent">{{ review.charisma }}</div>
+                            </div>
+                            <div class="text-center p-2 bg-dark-700 rounded-lg">
+                                <div class="text-xs text-gray-500 mb-1">Атмосфера</div>
+                                <div class="font-bold text-accent">{{ review.atmosphere }}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Total score -->
+                        <div class="flex items-center justify-between">
+                            <div class="text-gray-300 leading-relaxed line-clamp-3">
+                                {{ review.text|truncatechars:200 }}
+                            </div>
+                            <div class="w-16 h-16 rounded-full border-2 {% if review.total_score >= 35 %}border-green-500 text-green-400{% elif review.total_score >= 25 %}border-accent text-accent{% elif review.total_score >= 15 %}border-yellow-500 text-yellow-400{% else %}border-red-500 text-red-400{% endif %} flex items-center justify-center bg-dark-900 flex-shrink-0 ml-4">
+                                <div class="text-center">
+                                    <div class="text-xl font-bold">{{ review.total_score }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Read more link -->
+                        <a href="{{ review.release.get_absolute_url }}" class="inline-flex items-center text-accent hover:text-accent-hover mt-4 transition-colors">
+                            <span>Читать полностью</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
+                <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                </svg>
+                <h3 class="text-lg font-semibold mb-2">Пока нет рецензий</h3>
+                <p class="text-gray-500">Пользователь еще не оставлял рецензий</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

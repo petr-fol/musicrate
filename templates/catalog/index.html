@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}MusicRate - Главная{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            Оценивай музыку <span class="gradient-text">по-критически</span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+            Делись мнением о релизах, получай репутацию и находи единомышленников
+        </p>
+    </div>
+    
+    <!-- Stats bar -->
+    <div class="bg-dark-800 rounded-2xl p-6 mb-8 border border-dark-600">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+                <div class="text-3xl font-bold text-accent">{{ releases|length }}+</div>
+                <div class="text-gray-500 text-sm">Релизов</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-accent">5</div>
+                <div class="text-gray-500 text-sm">Критериев оценки</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-accent">45</div>
+                <div class="text-gray-500 text-sm">Макс. балл</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-accent">∞</div>
+                <div class="text-gray-500 text-sm">Мнений</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section title -->
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Последние релизы</h2>
+        <a href="{% url 'catalog:api_search' %}" class="text-accent hover:text-accent-hover flex items-center space-x-1 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>Добавить релиз</span>
+        </a>
+    </div>
+    
+    <!-- Releases grid -->
+    {% if releases %}
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {% for release in releases %}
+                <a href="{{ release.get_absolute_url }}" class="release-card group">
+                    <!-- Cover with score overlay -->
+                    <div class="relative aspect-square mb-3 overflow-hidden rounded-xl bg-dark-700">
+                        {% if release.cover %}
+                            <img 
+                                src="{{ release.cover.url }}" 
+                                alt="{{ release.title }}"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            >
+                        {% else %}
+                            <div class="w-full h-full bg-dark-600 flex items-center justify-center">
+                                <svg class="w-16 h-16 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                </svg>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Score badge -->
+                        {% if release.average_score > 0 %}
+                            <div class="absolute top-2 right-2">
+                                <div class="score-badge w-12 h-12 rounded-full bg-dark-900/90 border-2 {% if release.average_score >= 35 %}border-green-500 text-green-400{% elif release.average_score >= 25 %}border-accent text-accent{% elif release.average_score >= 15 %}border-yellow-500 text-yellow-400{% else %}border-red-500 text-red-400{% endif %} flex items-center justify-center font-bold text-sm">
+                                    {{ release.average_score|floatformat:0 }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Hover overlay -->
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-accent text-dark-900 font-semibold px-4 py-2 rounded-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                                Оценить
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="space-y-1">
+                        <h3 class="font-semibold text-white truncate group-hover:text-accent transition-colors" title="{{ release.title }}">
+                            {{ release.title }}
+                        </h3>
+                        <p class="text-sm text-gray-500 truncate" title="{{ release.artist.name }}">
+                            {{ release.artist.name }}
+                        </p>
+                        <div class="flex items-center space-x-2 text-xs text-gray-600">
+                            <span class="uppercase">{{ release.get_release_type_display }}</span>
+                            {% if release.release_date %}
+                                <span>•</span>
+                                <span>{{ release.release_date.year }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-16 bg-dark-800 rounded-2xl border border-dark-600">
+            <svg class="w-20 h-20 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+            </svg>
+            <h3 class="text-xl font-semibold mb-2">Пока нет релизов</h3>
+            <p class="text-gray-500 mb-6">Будь первым, кто добавит релиз из Яндекс.Музыки</p>
+            <a href="{% url 'catalog:api_search' %}" class="inline-flex items-center space-x-2 bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-6 py-3 rounded-xl transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <span>Найти релиз</span>
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% if query %}
+    {% if results %}
+        <div class="space-y-4">
+            <p class="text-gray-500 text-sm">Найдено результатов: {{ results|length }}</p>
+            
+            {% for result in results %}
+                <div class="bg-dark-800 rounded-2xl p-4 border border-dark-600 flex items-center space-x-4">
+                    <!-- Cover -->
+                    <div class="w-20 h-20 rounded-xl overflow-hidden bg-dark-700 flex-shrink-0">
+                        {% if result.cover_url %}
+                            <img src="{{ result.cover_url }}" alt="{{ result.title }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                </svg>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-lg truncate">{{ result.title }}</h3>
+                        <p class="text-gray-400 truncate">{{ result.artists }}</p>
+                        <div class="flex items-center space-x-2 text-sm text-gray-500 mt-1">
+                            <span class="uppercase">{{ result.type }}</span>
+                            {% if result.year %}
+                                <span>•</span>
+                                <span>{{ result.year }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Action -->
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'catalog:import_release' result.yandex_id %}" method="post" class="flex-shrink-0">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span>Добавить</span>
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="/admin/login/" class="bg-dark-700 hover:bg-dark-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                            </svg>
+                            <span>Войти</span>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
+            <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h3 class="text-lg font-semibold mb-2">Ничего не найдено</h3>
+            <p class="text-gray-500">Попробуйте изменить поисковый запрос</p>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
+        <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <h3 class="text-lg font-semibold mb-2">Начните поиск</h3>
+        <p class="text-gray-500">Введите название релиза или исполнителя</p>
+    </div>
+{% endif %}

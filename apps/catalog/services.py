@@ -1,6 +1,7 @@
 import os
 import requests
 from io import BytesIO
+from datetime import datetime
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from yandex_music import Client
@@ -11,6 +12,28 @@ class YandexMusicProvider:
     def __init__(self):
         token = os.getenv('YANDEX_MUSIC_TOKEN', '')
         self.client = Client(token).init() if token else Client().init()
+
+    def _parse_release_date(self, date_value):
+        """Parse release date from various formats"""
+        if not date_value:
+            return None
+        
+        date_str = str(date_value)
+        
+        # ISO 8601 format: 2020-12-01T00:00:00+03:00
+        if 'T' in date_str:
+            try:
+                return datetime.fromisoformat(date_str).date()
+            except ValueError:
+                pass
+        
+        # YYYY-MM-DD format
+        try:
+            return datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            pass
+        
+        return None
 
     def search(self, query, limit=10):
         """Search for releases on Yandex Music"""
@@ -89,9 +112,13 @@ class YandexMusicProvider:
                     'title': album.title,
                     'artist': artist,
                     'release_type': release_type,
-                    'release_date': album.release_date if hasattr(album, 'release_date') else None,
+                    'release_date': self._parse_release_date(album.release_date) if hasattr(album, 'release_date') else None,
                 }
             )
+            
+            # Save to generate slug if created
+            if created:
+                release.save()
             
             # Download cover if available
             if album.cover_uri and not release.cover:

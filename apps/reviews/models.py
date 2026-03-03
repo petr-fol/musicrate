@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.contrib.auth import get_user_model
 from apps.catalog.models import Release
 
@@ -45,7 +45,7 @@ class Review(models.Model):
     )
     
     text = models.TextField(
-        min_length=100,
+        validators=[MinLengthValidator(100)],
         verbose_name='Текст рецензии'
     )
     

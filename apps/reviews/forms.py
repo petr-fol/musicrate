@@ -7,27 +7,27 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['rhymes', 'structure', 'style', 'charisma', 'atmosphere', 'text']
         widgets = {
-            'rhymes': forms.RangeInput(attrs={
+            'rhymes': forms.NumberInput(attrs={
                 'min': 1, 'max': 10, 'value': 5,
                 'class': 'criteria-slider',
                 'data-criteria': 'rhymes'
             }),
-            'structure': forms.RangeInput(attrs={
+            'structure': forms.NumberInput(attrs={
                 'min': 1, 'max': 10, 'value': 5,
                 'class': 'criteria-slider',
                 'data-criteria': 'structure'
             }),
-            'style': forms.RangeInput(attrs={
+            'style': forms.NumberInput(attrs={
                 'min': 1, 'max': 10, 'value': 5,
                 'class': 'criteria-slider',
                 'data-criteria': 'style'
             }),
-            'charisma': forms.RangeInput(attrs={
+            'charisma': forms.NumberInput(attrs={
                 'min': 1, 'max': 10, 'value': 5,
                 'class': 'criteria-slider',
                 'data-criteria': 'charisma'
             }),
-            'atmosphere': forms.RangeInput(attrs={
+            'atmosphere': forms.NumberInput(attrs={
                 'min': 1, 'max': 5, 'value': 3,
                 'class': 'criteria-slider atmosphere-slider',
                 'data-criteria': 'atmosphere'
@@ -36,7 +36,6 @@ class ReviewForm(forms.ModelForm):
                 'rows': 6,
                 'placeholder': 'Напишите вашу рецензию (минимум 100 символов)...',
                 'class': 'review-textarea',
-                'minlength': 100,
             }),
         }
         labels = {

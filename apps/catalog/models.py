@@ -1,6 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+import cyrtranslit
+
+
+def cyrillic_slugify(value):
+    """Transliterate Cyrillic characters to Latin for slug"""
+    if value:
+        return slugify(cyrtranslit.to_latin(value, 'ru'))
+    return None
 
 
 class Artist(models.Model):
@@ -28,7 +36,7 @@ class Artist(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = cyrillic_slugify(self.name)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -92,7 +100,7 @@ class Release(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(f"{self.artist.name}-{self.title}")
+            base_slug = cyrillic_slugify(f"{self.artist.name}-{self.title}")
             slug = base_slug
             counter = 1
             while Release.objects.filter(slug=slug).exists():

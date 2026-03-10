@@ -5,6 +5,7 @@ app_name = 'catalog'
 
 urlpatterns = [
     path('', views.index_view, name='index'),
+    path('artist/<slug:slug>/', views.artist_detail_view, name='artist_detail'),
     path('release/<slug:slug>/', views.release_detail_view, name='release_detail'),
     path('search/external/', views.api_search_view, name='api_search'),
     path('import/release/<str:yandex_id>/', views.import_release_view, name='import_release'),

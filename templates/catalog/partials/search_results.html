@@ -1,58 +1,291 @@
 {% if query %}
-    {% if results %}
-        <div class="space-y-4">
-            <p class="text-gray-500 text-sm">Найдено результатов: {{ results|length }}</p>
-            
-            {% for result in results %}
-                <div class="bg-dark-800 rounded-2xl p-4 border border-dark-600 flex items-center space-x-4">
-                    <!-- Cover -->
-                    <div class="w-20 h-20 rounded-xl overflow-hidden bg-dark-700 flex-shrink-0">
-                        {% if result.cover_url %}
-                            <img src="{{ result.cover_url }}" alt="{{ result.title }}" class="w-full h-full object-cover">
-                        {% else %}
-                            <div class="w-full h-full flex items-center justify-center">
-                                <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
-                                </svg>
-                            </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Info -->
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-semibold text-lg truncate">{{ result.title }}</h3>
-                        <p class="text-gray-400 truncate">{{ result.artists }}</p>
-                        <div class="flex items-center space-x-2 text-sm text-gray-500 mt-1">
-                            <span class="uppercase">{{ result.type }}</span>
-                            {% if result.year %}
-                                <span>•</span>
-                                <span>{{ result.year }}</span>
-                            {% endif %}
+    <!-- Проверка: есть ли какие-либо результаты -->
+    {% if results.releases or results.artists or results.users or results.yandex_results %}
+        
+        <!-- Вкладка "Все" или общие результаты -->
+        {% if search_type == 'all' or not search_type %}
+            <div class="space-y-8">
+                
+                <!-- Локальные релизы -->
+                {% if results.releases %}
+                    <div>
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                            </svg>
+                            Релизы на платформе
+                        </h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {% for release in results.releases %}
+                                <a href="{{ release.get_absolute_url }}" class="release-card group">
+                                    <div class="relative aspect-square mb-2 overflow-hidden rounded-lg bg-dark-700">
+                                        {% if release.cover %}
+                                            <img src="{{ release.cover.url }}" alt="{{ release.title }}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+                                        {% else %}
+                                            <div class="w-full h-full bg-dark-600 flex items-center justify-center">
+                                                <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+                                        {% if release.average_score > 0 %}
+                                            <div class="absolute top-1 right-1 w-8 h-8 rounded-full bg-dark-900/90 border border-accent flex items-center justify-center font-bold text-xs text-accent">
+                                                {{ release.average_score|floatformat:0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="font-semibold text-sm truncate">{{ release.title }}</h3>
+                                    <p class="text-xs text-gray-500 truncate">{{ release.artist.name }}</p>
+                                </a>
+                            {% endfor %}
                         </div>
                     </div>
-                    
-                    <!-- Action -->
-                    {% if user.is_authenticated %}
-                        <form action="{% url 'catalog:import_release' result.yandex_id %}" method="post" class="flex-shrink-0">
-                            {% csrf_token %}
-                            <button type="submit" class="bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                </svg>
-                                <span>Добавить</span>
-                            </button>
-                        </form>
-                    {% else %}
-                        <a href="/admin/login/" class="bg-dark-700 hover:bg-dark-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                {% endif %}
+
+                <!-- Артисты -->
+                {% if results.artists %}
+                    <div>
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
-                            <span>Войти</span>
-                        </a>
+                            Артисты
+                        </h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {% for artist in results.artists %}
+                                <a href="{% url 'catalog:artist_detail' artist.slug %}" class="release-card group text-center">
+                                    <div class="aspect-square mb-2 overflow-hidden rounded-full bg-dark-700 w-24 h-24 mx-auto">
+                                        {% if artist.image %}
+                                            <img src="{{ artist.image.url }}" alt="{{ artist.name }}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+                                        {% else %}
+                                            <div class="w-full h-full bg-dark-600 flex items-center justify-center">
+                                                <svg class="w-10 h-10 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="font-semibold text-sm truncate">{{ artist.name }}</h3>
+                                    <p class="text-xs text-gray-500">{{ artist.releases.count }} релизов</p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Пользователи -->
+                {% if results.users %}
+                    <div>
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                            Пользователи
+                        </h2>
+                        <div class="space-y-2">
+                            {% for user in results.users %}
+                                <a href="{% url 'users:profile' user.username %}" class="block bg-dark-800 hover:bg-dark-700 rounded-lg p-3 border border-dark-600 transition-colors">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-dark-900 font-bold flex-shrink-0">
+                                            {{ user.username|first|upper }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="font-semibold">{{ user.get_display_name }}</h3>
+                                            <p class="text-xs text-gray-500">@{{ user.username }} • {{ user.points }} очков</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Яндекс.Музыка -->
+                {% if results.yandex_results %}
+                    <div>
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+                            </svg>
+                            Яндекс.Музыка
+                        </h2>
+                        <div class="space-y-3">
+                            {% for result in results.yandex_results %}
+                                <div class="bg-dark-800 rounded-lg p-3 border border-dark-600 flex items-center space-x-4">
+                                    <div class="w-16 h-16 rounded overflow-hidden bg-dark-700 flex-shrink-0">
+                                        {% if result.cover_url %}
+                                            <img src="{{ result.cover_url }}" alt="{{ result.title }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                            <div class="w-full h-full flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-semibold truncate">{{ result.title }}</h3>
+                                        <p class="text-sm text-gray-400 truncate">{{ result.artists }}</p>
+                                        <div class="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+                                            <span class="uppercase">{{ result.type }}</span>
+                                            {% if result.year %}
+                                                <span>•</span>
+                                                <span>{{ result.year }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% if user.is_authenticated %}
+                                        <form action="{% url 'catalog:import_release' result.yandex_id %}" method="post" class="flex-shrink-0">
+                                            {% csrf_token %}
+                                            <button type="submit" class="bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-3 py-1.5 rounded text-sm transition-colors">
+                                                Добавить
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+        {% elif search_type == 'releases' %}
+            <!-- Только релизы -->
+            {% if results.releases or results.yandex_results %}
+                <div class="space-y-6">
+                    {% if results.releases %}
+                        <div>
+                            <h2 class="text-xl font-bold mb-4">Релизы на платформе</h2>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                {% for release in results.releases %}
+                                    <a href="{{ release.get_absolute_url }}" class="release-card group">
+                                        <div class="relative aspect-square mb-2 overflow-hidden rounded-lg bg-dark-700">
+                                            {% if release.cover %}
+                                                <img src="{{ release.cover.url }}" alt="{{ release.title }}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+                                            {% else %}
+                                                <div class="w-full h-full bg-dark-600 flex items-center justify-center">
+                                                    <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                                    </svg>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <h3 class="font-semibold text-sm truncate">{{ release.title }}</h3>
+                                        <p class="text-xs text-gray-500 truncate">{{ release.artist.name }}</p>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if results.yandex_results %}
+                        <div>
+                            <h2 class="text-xl font-bold mb-4">Яндекс.Музыка</h2>
+                            <div class="space-y-3">
+                                {% for result in results.yandex_results %}
+                                    <div class="bg-dark-800 rounded-lg p-3 border border-dark-600 flex items-center space-x-4">
+                                        <div class="w-16 h-16 rounded overflow-hidden bg-dark-700 flex-shrink-0">
+                                            {% if result.cover_url %}
+                                                <img src="{{ result.cover_url }}" alt="{{ result.title }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                                <div class="w-full h-full flex items-center justify-center">
+                                                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                                    </svg>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="font-semibold truncate">{{ result.title }}</h3>
+                                            <p class="text-sm text-gray-400 truncate">{{ result.artists }}</p>
+                                        </div>
+                                        {% if user.is_authenticated %}
+                                            <form action="{% url 'catalog:import_release' result.yandex_id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-3 py-1.5 rounded text-sm transition-colors">
+                                                    Добавить
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% endif %}
                 </div>
-            {% endfor %}
-        </div>
+            {% else %}
+                <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
+                    <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Ничего не найдено</h3>
+                    <p class="text-gray-500">Попробуйте изменить поисковый запрос</p>
+                </div>
+            {% endif %}
+
+        {% elif search_type == 'artists' %}
+            <!-- Только артисты -->
+            {% if results.artists %}
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    {% for artist in results.artists %}
+                        <a href="{% url 'catalog:artist_detail' artist.slug %}" class="release-card group text-center">
+                            <div class="aspect-square mb-3 overflow-hidden rounded-full bg-dark-700 w-32 h-32 mx-auto">
+                                {% if artist.image %}
+                                    <img src="{{ artist.image.url }}" alt="{{ artist.name }}" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+                                {% else %}
+                                    <div class="w-full h-full bg-dark-600 flex items-center justify-center">
+                                        <svg class="w-12 h-12 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <h3 class="font-semibold truncate">{{ artist.name }}</h3>
+                            <p class="text-sm text-gray-500">{{ artist.releases.count }} релизов</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
+                    <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Ничего не найдено</h3>
+                    <p class="text-gray-500">Попробуйте изменить поисковый запрос</p>
+                </div>
+            {% endif %}
+
+        {% elif search_type == 'users' %}
+            <!-- Только пользователи -->
+            {% if results.users %}
+                <div class="space-y-3">
+                    {% for user in results.users %}
+                        <a href="{% url 'users:profile' user.username %}" class="block bg-dark-800 hover:bg-dark-700 rounded-lg p-4 border border-dark-600 transition-colors">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-dark-900 font-bold flex-shrink-0">
+                                    {{ user.username|first|upper }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-semibold text-lg">{{ user.get_display_name }}</h3>
+                                    <p class="text-sm text-gray-500">@{{ user.username }} • {{ user.points }} очков</p>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
+                    <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Ничего не найдено</h3>
+                    <p class="text-gray-500">Попробуйте изменить поисковый запрос</p>
+                </div>
+            {% endif %}
+        {% endif %}
     {% else %}
         <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
             <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,6 +301,6 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
         <h3 class="text-lg font-semibold mb-2">Начните поиск</h3>
-        <p class="text-gray-500">Введите название релиза или исполнителя</p>
+        <p class="text-gray-500">Введите название релиза, артиста или пользователя</p>
     </div>
 {% endif %}

@@ -9,53 +9,53 @@
     <div class="flex flex-col md:flex-row gap-8 mb-12">
         <!-- Cover -->
         <div class="w-full md:w-80 flex-shrink-0">
-            <div class="aspect-square rounded-2xl overflow-hidden bg-dark-700 shadow-2xl">
+            <div class="aspect-square rounded-2xl overflow-hidden bg-bg-tertiary shadow-2xl">
                 {% if release.cover %}
-                    <img 
-                        src="{{ release.cover.url }}" 
+                    <img
+                        src="{{ release.cover.url }}"
                         alt="{{ release.title }}"
                         class="w-full h-full object-cover"
                     >
                 {% else %}
-                    <div class="w-full h-full bg-dark-600 flex items-center justify-center">
-                        <svg class="w-32 h-32 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="w-full h-full bg-bg-card flex items-center justify-center">
+                        <svg class="w-32 h-32 text-text-muted" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
                         </svg>
                     </div>
                 {% endif %}
             </div>
         </div>
-        
+
         <!-- Info -->
         <div class="flex-1">
             <div class="flex items-start justify-between mb-4">
                 <div>
                     <div class="flex items-center space-x-3 mb-2">
-                        <span class="bg-dark-700 text-gray-400 text-xs font-semibold px-3 py-1 rounded-full uppercase">
+                        <span class="bg-bg-tertiary text-text-secondary text-xs font-semibold px-3 py-1 rounded-full uppercase">
                             {{ release.get_release_type_display }}
                         </span>
                         {% if release.release_date %}
-                            <span class="text-gray-500 text-sm">{{ release.release_date.year }}</span>
+                            <span class="text-text-muted text-sm">{{ release.release_date.year }}</span>
                         {% endif %}
                     </div>
                     <h1 class="text-3xl md:text-4xl font-bold mb-2">{{ release.title }}</h1>
-                    <a href="#" class="text-xl text-gray-400 hover:text-accent transition-colors">
+                    <a href="#" class="text-xl text-text-secondary hover:text-accent transition-colors">
                         {{ release.artist.name }}
                     </a>
                 </div>
-                
+
                 <!-- Average score -->
                 {% if release.average_score > 0 %}
                     <div class="text-center">
-                        <div class="w-24 h-24 rounded-full border-4 {% if release.average_score >= 35 %}border-green-500{% elif release.average_score >= 25 %}border-accent{% elif release.average_score >= 15 %}border-yellow-500{% else %}border-red-500{% endif %} flex items-center justify-center bg-dark-800">
+                        <div class="w-24 h-24 rounded-full border-4 {% if release.average_score >= 35 %}border-green-500{% elif release.average_score >= 25 %}border-accent{% elif release.average_score >= 15 %}border-yellow-500{% else %}border-red-500{% endif %} flex items-center justify-center bg-bg-secondary">
                             <div>
                                 <div class="text-3xl font-bold {% if release.average_score >= 35 %}text-green-400{% elif release.average_score >= 25 %}text-accent{% elif release.average_score >= 15 %}text-yellow-400{% else %}text-red-400{% endif %}">
                                     {{ release.average_score|floatformat:1 }}
                                 </div>
-                                <div class="text-xs text-gray-500">/ 45</div>
+                                <div class="text-xs text-text-muted">/ 45</div>
                             </div>
                         </div>
-                        <div class="text-sm text-gray-500 mt-2">{{ review_count }} оценок</div>
+                        <div class="text-sm text-text-muted mt-2">{{ review_count }} оценок</div>
                     </div>
                 {% endif %}
             </div>
@@ -64,7 +64,7 @@
             <div class="flex flex-wrap gap-3 mb-8">
                 {% if user.is_authenticated %}
                     {% if not user_review %}
-                        <a href="{% url 'reviews:add_review' release.slug %}" class="bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-6 py-3 rounded-xl flex items-center space-x-2 transition-colors">
+                        <a href="{% url 'reviews:add_review' release.slug %}" class="bg-accent hover:bg-accent-hover text-bg-primary font-semibold px-6 py-3 rounded-xl flex items-center space-x-2 transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                             </svg>
@@ -79,7 +79,7 @@
                         </div>
                     {% endif %}
                 {% else %}
-                    <a href="/admin/login/" class="bg-dark-700 hover:bg-dark-600 text-white font-semibold px-6 py-3 rounded-xl flex items-center space-x-2 transition-colors">
+                    <a href="/admin/login/" class="bg-bg-tertiary hover:bg-bg-card text-text-primary font-semibold px-6 py-3 rounded-xl flex items-center space-x-2 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
                         </svg>
@@ -87,10 +87,10 @@
                     </a>
                 {% endif %}
             </div>
-            
+
             <!-- Radar chart -->
             {% if review_count > 0 %}
-                <div class="bg-dark-800 rounded-2xl p-6 border border-dark-600">
+                <div class="bg-bg-secondary rounded-2xl p-6 border border-border">
                     <h3 class="text-lg font-semibold mb-4">Средние оценки по критериям</h3>
                     <div class="w-full max-w-md mx-auto">
                         <canvas id="criteriaChart"></canvas>
@@ -101,13 +101,13 @@
     </div>
     
     <!-- Reviews section -->
-    <div class="border-t border-dark-600 pt-8">
+    <div class="border-t border-border pt-8">
         <h2 class="text-2xl font-bold mb-6">Рецензии ({{ review_count }})</h2>
-        
+
         {% if reviews %}
             <div class="space-y-6">
                 {% for review in reviews %}
-                    <div class="bg-dark-800 rounded-2xl p-6 border border-dark-600">
+                    <div class="bg-bg-secondary rounded-2xl p-6 border border-border">
                         <!-- Review header -->
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex items-center space-x-3">
@@ -115,63 +115,63 @@
                                     {% if review.user.avatar %}
                                         <img src="{{ review.user.avatar.url }}" alt="{{ review.user.username }}" class="w-10 h-10 rounded-full object-cover">
                                     {% else %}
-                                        <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-dark-900 font-bold">
+                                        <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-bg-primary font-bold">
                                             {{ review.user.username|first|upper }}
                                         </div>
                                     {% endif %}
                                     <div>
                                         <div class="font-semibold">{{ review.user.get_display_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
+                                        <div class="text-sm text-text-muted">{{ review.created_at|date:"d.m.Y" }}</div>
                                     </div>
                                 </a>
                             </div>
-                            
+
                             <!-- Total score -->
-                            <div class="w-16 h-16 rounded-full border-2 {% if review.total_score >= 35 %}border-green-500 text-green-400{% elif review.total_score >= 25 %}border-accent text-accent{% elif review.total_score >= 15 %}border-yellow-500 text-yellow-400{% else %}border-red-500 text-red-400{% endif %} flex items-center justify-center bg-dark-900">
+                            <div class="w-16 h-16 rounded-full border-2 {% if review.total_score >= 35 %}border-green-500 text-green-400{% elif review.total_score >= 25 %}border-accent text-accent{% elif review.total_score >= 15 %}border-yellow-500 text-yellow-400{% else %}border-red-500 text-red-400{% endif %} flex items-center justify-center bg-bg-primary">
                                 <div class="text-center">
                                     <div class="text-xl font-bold">{{ review.total_score }}</div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Criteria breakdown -->
                         <div class="grid grid-cols-5 gap-2 mb-4">
-                            <div class="text-center p-2 bg-dark-700 rounded-lg">
-                                <div class="text-xs text-gray-500 mb-1">Рифмы</div>
+                            <div class="text-center p-2 bg-bg-tertiary rounded-lg">
+                                <div class="text-xs text-text-muted mb-1">Рифмы</div>
                                 <div class="font-bold text-accent">{{ review.rhymes }}</div>
                             </div>
-                            <div class="text-center p-2 bg-dark-700 rounded-lg">
-                                <div class="text-xs text-gray-500 mb-1">Структура</div>
+                            <div class="text-center p-2 bg-bg-tertiary rounded-lg">
+                                <div class="text-xs text-text-muted mb-1">Структура</div>
                                 <div class="font-bold text-accent">{{ review.structure }}</div>
                             </div>
-                            <div class="text-center p-2 bg-dark-700 rounded-lg">
-                                <div class="text-xs text-gray-500 mb-1">Стиль</div>
+                            <div class="text-center p-2 bg-bg-tertiary rounded-lg">
+                                <div class="text-xs text-text-muted mb-1">Стиль</div>
                                 <div class="font-bold text-accent">{{ review.style }}</div>
                             </div>
-                            <div class="text-center p-2 bg-dark-700 rounded-lg">
-                                <div class="text-xs text-gray-500 mb-1">Харизма</div>
+                            <div class="text-center p-2 bg-bg-tertiary rounded-lg">
+                                <div class="text-xs text-text-muted mb-1">Харизма</div>
                                 <div class="font-bold text-accent">{{ review.charisma }}</div>
                             </div>
-                            <div class="text-center p-2 bg-dark-700 rounded-lg">
-                                <div class="text-xs text-gray-500 mb-1">Атмосфера</div>
+                            <div class="text-center p-2 bg-bg-tertiary rounded-lg">
+                                <div class="text-xs text-text-muted mb-1">Атмосфера</div>
                                 <div class="font-bold text-accent">{{ review.atmosphere }}</div>
                             </div>
                         </div>
-                        
+
                         <!-- Review text -->
-                        <div class="text-gray-300 leading-relaxed">
+                        <div class="text-text-secondary leading-relaxed">
                             {{ review.text|linebreaks }}
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="text-center py-12 bg-dark-800 rounded-2xl border border-dark-600">
-                <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="text-center py-12 bg-bg-secondary rounded-2xl border border-border">
+                <svg class="w-16 h-16 text-text-muted mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                 </svg>
                 <h3 class="text-lg font-semibold mb-2">Пока нет рецензий</h3>
-                <p class="text-gray-500">Будь первым, кто оценит этот релиз</p>
+                <p class="text-text-muted">Будь первым, кто оценит этот релиз</p>
             </div>
         {% endif %}
     </div>
@@ -179,6 +179,13 @@
 
 {% if review_count > 0 %}
 <script>
+    // Получаем цвета из CSS переменных
+    const styles = getComputedStyle(document.documentElement);
+    const textColor = styles.getPropertyValue('--text-primary').trim() || '#ffffff';
+    const textMutedColor = styles.getPropertyValue('--text-muted').trim() || '#6b7280';
+    const accentColor = styles.getPropertyValue('--accent-primary').trim() || '#ffcc00';
+    const borderColor = styles.getPropertyValue('--border-color').trim() || '#3f3f3f';
+
     // Radar chart
     const ctx = document.getElementById('criteriaChart').getContext('2d');
     new Chart(ctx, {
@@ -194,13 +201,13 @@
                     {{ avg_criteria.charisma }},
                     {{ avg_criteria.atmosphere }}
                 ],
-                backgroundColor: 'rgba(255, 204, 0, 0.2)',
-                borderColor: '#ffcc00',
+                backgroundColor: accentColor.replace(')', ', 0.2)').replace('rgb', 'rgba').replace('#', ''),
+                borderColor: accentColor,
                 borderWidth: 2,
-                pointBackgroundColor: '#ffcc00',
+                pointBackgroundColor: accentColor,
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: '#ffcc00'
+                pointHoverBorderColor: accentColor
             }]
         },
         options: {
@@ -211,17 +218,17 @@
                     max: 10,
                     ticks: {
                         stepSize: 2,
-                        color: '#666',
+                        color: textMutedColor,
                         backdropColor: 'transparent'
                     },
                     grid: {
-                        color: '#2a2a2a'
+                        color: borderColor
                     },
                     angleLines: {
-                        color: '#2a2a2a'
+                        color: borderColor
                     },
                     pointLabels: {
-                        color: '#fff',
+                        color: textColor,
                         font: {
                             size: 12
                         }

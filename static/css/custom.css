@@ -17,14 +17,15 @@
 
 /* Focus styles */
 *:focus-visible {
-    outline: 2px solid #ffcc00;
+    outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
 }
 
 /* Selection color */
 ::selection {
-    background-color: rgba(255, 204, 0, 0.3);
-    color: #ffffff;
+    background-color: var(--accent-primary);
+    opacity: 0.3;
+    color: var(--text-primary);
 }
 
 /* Custom animations */
@@ -33,6 +34,7 @@
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -66,4 +68,106 @@
 
 .htmx-request.htmx-indicator {
     opacity: 1;
+}
+
+/* Theme transition */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card styles with theme support */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+/* Input styles with theme support */
+input,
+textarea,
+select {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: var(--accent-primary);
+    color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Link styles */
+a {
+    color: var(--accent-primary);
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+/* Utility classes for theme colors */
+.bg-bg-primary {
+    background-color: var(--bg-primary);
+}
+
+.bg-bg-secondary {
+    background-color: var(--bg-secondary);
+}
+
+.bg-bg-tertiary {
+    background-color: var(--bg-tertiary);
+}
+
+.bg-bg-card {
+    background-color: var(--bg-card);
+}
+
+.text-text-primary {
+    color: var(--text-primary);
+}
+
+.text-text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-text-muted {
+    color: var(--text-muted);
+}
+
+.border-border {
+    border-color: var(--border-color);
+}
+
+.border-bg-card {
+    border-color: var(--bg-card);
+}
+
+/* Score badge colors - using CSS variables where possible */
+.score-badge-good {
+    border-color: #22c55e;
+    color: #4ade80;
+}
+
+.score-badge-great {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.score-badge-average {
+    border-color: #eab308;
+    color: #facc15;
+}
+
+.score-badge-poor {
+    border-color: #ef4444;
+    color: #f87171;
 }

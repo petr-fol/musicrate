@@ -1,49 +1,10 @@
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
-import cyrtranslit
+from .mixins import TimestampMixin
+from .managers import ReleaseManager
 
 
-def cyrillic_slugify(value):
-    """Transliterate Cyrillic characters to Latin for slug"""
-    if value:
-        return slugify(cyrtranslit.to_latin(value, 'ru'))
-    return None
-
-
-class Artist(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Имя исполнителя')
-    slug = models.SlugField(unique=True, blank=True)
-    yandex_id = models.CharField(
-        max_length=100,
-        blank=True,
-        verbose_name='ID Яндекс.Музыки'
-    )
-    image = models.ImageField(
-        upload_to='artists/',
-        blank=True,
-        null=True,
-        verbose_name='Изображение'
-    )
-
-    class Meta:
-        verbose_name = 'Исполнитель'
-        verbose_name_plural = 'Исполнители'
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = cyrillic_slugify(self.name)
-        super().save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('catalog:artist_detail', kwargs={'slug': self.slug})
-
-
-class Release(models.Model):
+class Release(TimestampMixin):
     RELEASE_TYPES = [
         ('single', 'Сингл'),
         ('ep', 'EP'),
@@ -53,7 +14,7 @@ class Release(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название')
     slug = models.SlugField(unique=True, blank=True)
     artist = models.ForeignKey(
-        Artist,
+        'Artist',
         on_delete=models.CASCADE,
         related_name='releases',
         verbose_name='Исполнитель'
@@ -88,7 +49,8 @@ class Release(models.Model):
         default=0,
         verbose_name='Средний балл'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = ReleaseManager()
 
     class Meta:
         verbose_name = 'Релиз'
@@ -100,6 +62,7 @@ class Release(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
+            from .utils import cyrillic_slugify
             base_slug = cyrillic_slugify(f"{self.artist.name}-{self.title}")
             slug = base_slug
             counter = 1
@@ -113,8 +76,18 @@ class Release(models.Model):
         return reverse('catalog:release_detail', kwargs={'slug': self.slug})
 
     def update_average_score(self):
+        """Пересчитать средний балл релиза на основе рецензий"""
         reviews = self.reviews.all()
         if reviews.exists():
             avg = sum(r.total_score for r in reviews) / reviews.count()
             self.average_score = round(avg, 2)
             self.save(update_fields=['average_score'])
+
+    @property
+    def review_count(self):
+        """Количество рецензий для релиза"""
+        return self.reviews.count()
+    
+    def get_review_count(self):
+        """Альтернативный метод для получения количества рецензий"""
+        return self.reviews.count()

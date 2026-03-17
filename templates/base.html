@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru" class="dark">
+<html lang="ru" class="{% if current_theme.theme_type == 'dark' %}dark{% else %}light{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MusicRate{% endblock %}</title>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,55 +13,73 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: {
-                            900: '#0a0a0a',
-                            800: '#141414',
-                            700: '#1a1a1a',
-                            600: '#2a2a2a',
+                        'bg-primary': 'var(--bg-primary)',
+                        'bg-secondary': 'var(--bg-secondary)',
+                        'bg-tertiary': 'var(--bg-tertiary)',
+                        'bg-card': 'var(--bg-card)',
+                        'text-primary': 'var(--text-primary)',
+                        'text-secondary': 'var(--text-secondary)',
+                        'text-muted': 'var(--text-muted)',
+                        'accent': {
+                            DEFAULT: 'var(--accent-primary)',
+                            hover: 'var(--accent-hover)',
                         },
-                        accent: {
-                            DEFAULT: '#ffcc00',
-                            hover: '#e6b800',
+                        'border': {
+                            DEFAULT: 'var(--border-color)',
                         }
                     }
                 }
             }
         }
     </script>
-    
+
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/custom.css">
-    
+
+    <!-- Theme CSS Variables -->
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #ffffff;
+        :root {
+            --bg-primary: {{ current_theme.bg_primary }};
+            --bg-secondary: {{ current_theme.bg_secondary }};
+            --bg-tertiary: {{ current_theme.bg_tertiary }};
+            --bg-card: {{ current_theme.bg_card }};
+            --text-primary: {{ current_theme.text_primary }};
+            --text-secondary: {{ current_theme.text_secondary }};
+            --text-muted: {{ current_theme.text_muted }};
+            --accent-primary: {{ current_theme.accent_primary }};
+            --accent-hover: {{ current_theme.accent_hover }};
+            --border-color: {{ current_theme.border_color }};
         }
-        
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #141414;
+            background: var(--bg-secondary);
         }
         ::-webkit-scrollbar-thumb {
-            background: #2a2a2a;
+            background: var(--bg-card);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #3a3a3a;
+            background: var(--bg-tertiary);
         }
-        
+
         /* Range slider styling */
         input[type="range"] {
             -webkit-appearance: none;
@@ -69,42 +87,42 @@
             background: transparent;
             cursor: pointer;
         }
-        
+
         input[type="range"]::-webkit-slider-track {
-            background: #2a2a2a;
+            background: var(--bg-card);
             height: 8px;
             border-radius: 4px;
         }
-        
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            background: #ffcc00;
+            background: var(--accent-primary);
             height: 24px;
             width: 24px;
             border-radius: 50%;
             margin-top: -8px;
             transition: transform 0.1s;
         }
-        
+
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.1);
         }
-        
+
         input[type="range"]::-moz-range-track {
-            background: #2a2a2a;
+            background: var(--bg-card);
             height: 8px;
             border-radius: 4px;
         }
-        
+
         input[type="range"]::-moz-range-thumb {
-            background: #ffcc00;
+            background: var(--accent-primary);
             height: 24px;
             width: 24px;
             border-radius: 50%;
             border: none;
         }
-        
+
         /* Score badge animation */
         .score-badge {
             transition: transform 0.2s ease;
@@ -112,7 +130,7 @@
         .score-badge:hover {
             transform: scale(1.05);
         }
-        
+
         /* Card hover effect */
         .release-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -121,36 +139,36 @@
             transform: translateY(-4px);
             box-shadow: 0 10px 40px rgba(255, 204, 0, 0.1);
         }
-        
+
         /* Gradient text */
         .gradient-text {
-            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-hover) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
     </style>
-    
+
     {% block extra_css %}{% endblock %}
 </head>
 <body class="min-h-screen flex flex-col" x-data>
-    
+
     <!-- Navigation -->
-    <nav class="bg-dark-800 border-b border-dark-600 sticky top-0 z-50">
+    <nav class="bg-bg-secondary border-b border-border sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
                     <a href="{% url 'catalog:index' %}" class="flex items-center space-x-2">
                         <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-dark-900" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-6 h-6 text-bg-primary" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
                             </svg>
                         </div>
                         <span class="text-xl font-bold gradient-text">MusicRate</span>
                     </a>
                 </div>
-                
+
                 <!-- Search -->
                 <div class="flex-1 max-w-lg mx-8 flex items-center">
                     <form action="{% url 'catalog:api_search' %}" method="get" class="w-full">
@@ -159,36 +177,39 @@
                                 type="text"
                                 name="q"
                                 placeholder="Поиск релизов, артистов, пользователей..."
-                                class="w-full bg-dark-700 border border-dark-600 rounded-full py-2 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+                                class="w-full bg-bg-tertiary border border-border rounded-full py-2 pl-10 pr-4 text-text-primary placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
                             >
-                            <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="absolute left-3 top-2.5 w-5 h-5 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
                     </form>
                 </div>
-                
+
                 <!-- User menu -->
                 <div class="flex items-center space-x-4">
                     {% if user.is_authenticated %}
+                        <!-- Theme Switcher -->
+                        {% include 'themes/partials/theme_switcher.html' %}
+
                         <a href="{% url 'users:profile' user.username %}" class="flex items-center space-x-2 hover:text-accent transition-colors">
                             {% if user.avatar %}
                                 <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="w-8 h-8 rounded-full object-cover">
                             {% else %}
-                                <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-dark-900 font-bold">
+                                <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-bg-primary font-bold">
                                     {{ user.username|first|upper }}
                                 </div>
                             {% endif %}
                             <span class="hidden sm:block">{{ user.username }}</span>
-                            <span class="bg-accent text-dark-900 text-xs font-bold px-2 py-0.5 rounded-full">{{ user.points }}</span>
+                            <span class="bg-accent text-bg-primary text-xs font-bold px-2 py-0.5 rounded-full">{{ user.points }}</span>
                         </a>
-                        <a href="/admin/logout/" class="text-gray-400 hover:text-white transition-colors">
+                        <a href="/admin/logout/" class="text-text-secondary hover:text-text-primary transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
                         </a>
                     {% else %}
-                        <a href="/admin/login/" class="bg-accent hover:bg-accent-hover text-dark-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+                        <a href="/admin/login/" class="bg-accent hover:bg-accent-hover text-bg-primary font-semibold px-4 py-2 rounded-lg transition-colors">
                             Войти
                         </a>
                     {% endif %}
@@ -196,7 +217,7 @@
             </div>
         </div>
     </nav>
-    
+
     <!-- Messages -->
     {% if messages %}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
@@ -207,31 +228,34 @@
             {% endfor %}
         </div>
     {% endif %}
-    
+
     <!-- Main content -->
     <main class="flex-grow">
         {% block content %}{% endblock %}
     </main>
-    
+
     <!-- Footer -->
-    <footer class="bg-dark-800 border-t border-dark-600 mt-12">
+    <footer class="bg-bg-secondary border-t border-border mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="flex items-center space-x-2 mb-4 md:mb-0">
                     <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-dark-900" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-5 h-5 text-bg-primary" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
                         </svg>
                     </div>
                     <span class="text-lg font-bold gradient-text">MusicRate</span>
                 </div>
-                <p class="text-gray-500 text-sm">
+                <p class="text-text-muted text-sm">
                     Платформа для рецензирования музыки. Аналог RisaZaTvorchestvo.
                 </p>
             </div>
         </div>
     </footer>
-    
+
     {% block extra_js %}{% endblock %}
+
+    <!-- Theme Switcher JS -->
+    <script src="/static/js/theme-switcher.js"></script>
 </body>
 </html>

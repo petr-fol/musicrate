@@ -7,6 +7,18 @@ User = get_user_model()
 
 
 class Review(models.Model):
+    """
+    Модель рецензии на релиз.
+    
+    Оценка производится по 5 критериям:
+    - Рифмы (1-10)
+    - Структура (1-10)
+    - Стиль (1-10)
+    - Харизма (1-10)
+    - Атмосфера (1-5)
+    
+    Максимальный балл: 45
+    """
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -19,7 +31,7 @@ class Review(models.Model):
         related_name='reviews',
         verbose_name='Релиз'
     )
-    
+
     # Criteria (1-10)
     rhymes = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(10)],
@@ -37,23 +49,20 @@ class Review(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(10)],
         verbose_name='Харизма'
     )
-    
+
     # Atmosphere (1-5)
     atmosphere = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         verbose_name='Атмосфера'
     )
-    
+
     text = models.TextField(
         validators=[MinLengthValidator(100)],
         verbose_name='Текст рецензии'
     )
-    
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Дата создания'
-    )
-    
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
     total_score = models.PositiveSmallIntegerField(
         editable=False,
         verbose_name='Итоговый балл'
@@ -72,9 +81,9 @@ class Review(models.Model):
         # Calculate total score: (Rhymes + Structure + Style + Charisma) + Atmosphere
         # Max score: 45
         self.total_score = (
-            self.rhymes + 
-            self.structure + 
-            self.style + 
+            self.rhymes +
+            self.structure +
+            self.style +
             self.charisma
         ) + self.atmosphere
         super().save(*args, **kwargs)

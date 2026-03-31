@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('apps.reviews.urls')),
     path('', include('apps.users.urls')),
     path('themes/', include('apps.themes.urls')),
+    path('i18n/', include('apps.i18n.urls')),
 ]
 
 if settings.DEBUG:

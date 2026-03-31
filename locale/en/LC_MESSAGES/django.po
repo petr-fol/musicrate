@@ -1,0 +1,213 @@
+# English translations for MusicRate
+# Copyright (C) 2024 MusicRate
+# This file is distributed under the same license as the MusicRate package.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicRate 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Main navigation
+msgid "MusicRate"
+msgstr "MusicRate"
+
+msgid "Search releases, artists, users..."
+msgstr "Search releases, artists, users..."
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Themes"
+msgstr "Themes"
+
+msgid "Languages"
+msgstr "Languages"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Login"
+msgstr "Login"
+
+# Homepage
+msgid "Rate music"
+msgstr "Rate music"
+
+msgid "By criteria"
+msgstr "By criteria"
+
+msgid "Share your opinion about releases, gain reputation and find like-minded people"
+msgstr "Share your opinion about releases, gain reputation and find like-minded people"
+
+msgid "Releases"
+msgstr "Releases"
+
+msgid "Evaluation criteria"
+msgstr "Evaluation criteria"
+
+msgid "Max score"
+msgstr "Max score"
+
+msgid "Opinions"
+msgstr "Opinions"
+
+msgid "Recommended for you"
+msgstr "Recommended for you"
+
+msgid "Based on your ratings"
+msgstr "Based on your ratings"
+
+msgid "Latest releases"
+msgstr "Latest releases"
+
+msgid "Add release"
+msgstr "Add release"
+
+msgid "No releases yet"
+msgstr "No releases yet"
+
+msgid "Be the first to add a release from Yandex.Music"
+msgstr "Be the first to add a release from Yandex.Music"
+
+msgid "Find release"
+msgstr "Find release"
+
+msgid "Rate"
+msgstr "Rate"
+
+# Release detail
+msgid "Reviews"
+msgstr "Reviews"
+
+msgid "Average ratings by criteria"
+msgstr "Average ratings by criteria"
+
+msgid "You have already rated"
+msgstr "You have already rated"
+
+msgid "Login to rate"
+msgstr "Login to rate"
+
+msgid "Rate release"
+msgstr "Rate release"
+
+msgid "No reviews yet"
+msgstr "No reviews yet"
+
+msgid "Be the first to rate this release"
+msgstr "Be the first to rate this release"
+
+# Criteria
+msgid "Rhymes"
+msgstr "Rhymes"
+
+msgid "Structure"
+msgstr "Structure"
+
+msgid "Style"
+msgstr "Style"
+
+msgid "Charisma"
+msgstr "Charisma"
+
+msgid "Atmosphere"
+msgstr "Atmosphere"
+
+# Add review
+msgid "Criteria evaluation (1-10)"
+msgstr "Criteria evaluation (1-10)"
+
+msgid "Review text"
+msgstr "Review text"
+
+msgid "Write your review (minimum 100 characters)..."
+msgstr "Write your review (minimum 100 characters)..."
+
+msgid "Minimum 100 characters"
+msgstr "Minimum 100 characters"
+
+msgid "characters"
+msgstr "characters"
+
+msgid "Submit review"
+msgstr "Submit review"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+# Artist
+msgid "Albums"
+msgstr "Albums"
+
+msgid "EP"
+msgstr "EP"
+
+msgid "Singles"
+msgstr "Singles"
+
+msgid "No releases"
+msgstr "No releases"
+
+msgid "Be the first to add a release by this artist"
+msgstr "Be the first to add a release by this artist"
+
+msgid "Find releases"
+msgstr "Find releases"
+
+msgid "Listen on Yandex.Music"
+msgstr "Listen on Yandex.Music"
+
+# Profile
+msgid "Reputation points"
+msgstr "Reputation points"
+
+msgid "Last rating"
+msgstr "Last rating"
+
+msgid "User reviews"
+msgstr "User reviews"
+
+msgid "No user reviews yet"
+msgstr "No user reviews yet"
+
+msgid "Read more"
+msgstr "Read more"
+
+# Messages
+msgid "Your review has been successfully added!"
+msgstr "Your review has been successfully added!"
+
+msgid "You have already left a review for this release."
+msgstr "You have already left a review for this release."
+
+msgid "Release successfully imported!"
+msgstr "Release successfully imported!"
+
+msgid "Failed to import release."
+msgstr "Failed to import release."
+
+# Theme types
+msgid "Dark"
+msgstr "Dark"
+
+msgid "Light"
+msgstr "Light"
+
+# Footer
+msgid "Music rating platform. Analog of RisaZaTvorchestvo."
+msgstr "Music rating platform. Analog of RisaZaTvorchestvo."

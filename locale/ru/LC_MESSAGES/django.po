@@ -1,0 +1,213 @@
+# Russian translations for MusicRate
+# Copyright (C) 2024 MusicRate
+# This file is distributed under the same license as the MusicRate package.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicRate 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+# Main navigation
+msgid "MusicRate"
+msgstr "MusicRate"
+
+msgid "Search releases, artists, users..."
+msgstr "Поиск релизов, артистов, пользователей..."
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Profile"
+msgstr "Профиль"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Themes"
+msgstr "Темы"
+
+msgid "Languages"
+msgstr "Языки"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Login"
+msgstr "Войти"
+
+# Homepage
+msgid "Rate music"
+msgstr "Оценивай музыку"
+
+msgid "By criteria"
+msgstr "По критериям"
+
+msgid "Share your opinion about releases, gain reputation and find like-minded people"
+msgstr "Делись мнением о релизах, получай репутацию и находи единомышленников"
+
+msgid "Releases"
+msgstr "Релизов"
+
+msgid "Evaluation criteria"
+msgstr "Критериев оценки"
+
+msgid "Max score"
+msgstr "Макс. балл"
+
+msgid "Opinions"
+msgstr "Мнений"
+
+msgid "Recommended for you"
+msgstr "Рекомендуем вам"
+
+msgid "Based on your ratings"
+msgstr "На основе ваших оценок"
+
+msgid "Latest releases"
+msgstr "Последние релизы"
+
+msgid "Add release"
+msgstr "Добавить релиз"
+
+msgid "No releases yet"
+msgstr "Пока нет релизов"
+
+msgid "Be the first to add a release from Yandex.Music"
+msgstr "Будь первым, кто добавит релиз из Яндекс.Музыки"
+
+msgid "Find release"
+msgstr "Найти релиз"
+
+msgid "Rate"
+msgstr "Оценить"
+
+# Release detail
+msgid "Reviews"
+msgstr "Рецензии"
+
+msgid "Average ratings by criteria"
+msgstr "Средние оценки по критериям"
+
+msgid "You have already rated"
+msgstr "Вы уже оценили"
+
+msgid "Login to rate"
+msgstr "Войти чтобы оценить"
+
+msgid "Rate release"
+msgstr "Оценить релиз"
+
+msgid "No reviews yet"
+msgstr "Пока нет рецензий"
+
+msgid "Be the first to rate this release"
+msgstr "Будь первым, кто оценит этот релиз"
+
+# Criteria
+msgid "Rhymes"
+msgstr "Рифмы"
+
+msgid "Structure"
+msgstr "Структура"
+
+msgid "Style"
+msgstr "Стиль"
+
+msgid "Charisma"
+msgstr "Харизма"
+
+msgid "Atmosphere"
+msgstr "Атмосфера"
+
+# Add review
+msgid "Criteria evaluation (1-10)"
+msgstr "Критерии оценки (1-10)"
+
+msgid "Review text"
+msgstr "Текст рецензии"
+
+msgid "Write your review (minimum 100 characters)..."
+msgstr "Напишите вашу рецензию (минимум 100 символов)..."
+
+msgid "Minimum 100 characters"
+msgstr "Минимум 100 символов"
+
+msgid "characters"
+msgstr "символов"
+
+msgid "Submit review"
+msgstr "Отправить оценку"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+# Artist
+msgid "Albums"
+msgstr "Альбомы"
+
+msgid "EP"
+msgstr "EP"
+
+msgid "Singles"
+msgstr "Синглы"
+
+msgid "No releases"
+msgstr "У артиста пока нет релизов"
+
+msgid "Be the first to add a release by this artist"
+msgstr "Будь первым, кто добавит релиз этого исполнителя"
+
+msgid "Find releases"
+msgstr "Найти релизы"
+
+msgid "Listen on Yandex.Music"
+msgstr "Слушать на Яндекс.Музыке"
+
+# Profile
+msgid "Reputation points"
+msgstr "Очков репутации"
+
+msgid "Last rating"
+msgstr "Последняя оценка"
+
+msgid "User reviews"
+msgstr "Рецензии пользователя"
+
+msgid "No user reviews yet"
+msgstr "Пользователь еще не оставлял рецензий"
+
+msgid "Read more"
+msgstr "Читать полностью"
+
+# Messages
+msgid "Your review has been successfully added!"
+msgstr "Ваша рецензия успешно добавлена!"
+
+msgid "You have already left a review for this release."
+msgstr "Вы уже оставляли рецензию на этот релиз."
+
+msgid "Release successfully imported!"
+msgstr "Релиз успешно импортирован!"
+
+msgid "Failed to import release."
+msgstr "Не удалось импортировать релиз."
+
+# Theme types
+msgid "Dark"
+msgstr "Тёмная"
+
+msgid "Light"
+msgstr "Светлая"
+
+# Footer
+msgid "Music rating platform. Analog of RisaZaTvorchestvo."
+msgstr "Платформа для рецензирования музыки. Аналог RisaZaTvorchestvo."

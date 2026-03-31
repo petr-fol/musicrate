@@ -662,23 +662,115 @@ def get_user_recommendations(user, limit=6):
 | `/search/external/` | `api_search_view` | Расширенный поиск |
 | `/import/release/<yandex_id>/` | `import_release_view` | Импорт релиза |
 | `/profile/<username>/` | `profile_view` | Профиль пользователя |
+| `/themes/set/` | `set_theme` | Переключение темы |
+| `/i18n/set/` | `set_language` | Переключение языка |
 
 ---
+
+## Новые функции (v3) — Интернационализация и Темы
+
+### Многоязычность (i18n)
+
+**Файлы:** `apps/i18n/`, `locale/`
+
+Приложение поддерживает 3 языка:
+- **Русский** (ru) — по умолчанию
+- **English** (en)
+- **Қазақша** (kk)
+
+**Реализация:**
+- Django i18n framework
+- Язык сохраняется в cookie и сессии
+- Переключатель в шапке сайта (HTMX)
+- Файлы переводов в `locale/<lang>/LC_MESSAGES/django.po`
+
+```python
+# apps/i18n/views.py
+@require_POST
+def set_language(request):
+    lang_code = request.POST.get('language')
+    # Сохранение в сессии и cookie
+```
+
+**Переключение языка:**
+```bash
+# Через форму
+POST /i18n/set/
+language=en&next=/
+
+# Через HTMX
+hx-post="/i18n/set/"
+```
+
+### Кастомные темы оформления
+
+**Файлы:** `apps/themes/`, `templates/themes/`
+
+Доступно 6 тем оформления через систему CSS переменных:
+
+| Тема | Тип | Цвета |
+|------|-----|-------|
+| Тёмная классика | 🌙 Тёмная | Черно-оранжевая (по умолчанию) |
+| Светлая классика | ☀️ Светлая | Бело-оранжевая |
+| Ночной океан | 🌙 Тёмная | Сине-голубая |
+| Матрица | 🌙 Тёмная | Черно-зелёная |
+| Минимализм | ☀️ Светлая | Чёрно-белая |
+| Киберпанк | 🌙 Тёмная | Фиолетово-тёмная |
+
+**Модель темы:**
+```python
+class Theme(models.Model):
+    name = CharField()
+    slug = SlugField(unique=True)
+    theme_type = ChoiceField(['dark', 'light'])
+    # CSS переменные
+    bg_primary = CharField()
+    accent_primary = CharField()
+    ...
+```
+
+**Хранение предпочтений:**
+```python
+class ThemePreference(models.Model):
+    user = OneToOneField(User)
+    theme = ForeignKey(Theme)
+```
+
+### Обновлённая структура проекта
+
+```
+musicrate/
+├── apps/
+│   ├── catalog/        # Каталог релизов
+│   ├── reviews/        # Рецензии
+│   ├── users/          # Пользователи
+│   ├── themes/         # Темы оформления (+)
+│   └── i18n/           # Интернационализация (+)
+├── locale/             # Файлы переводов (+)
+│   ├── ru/LC_MESSAGES/
+│   ├── en/LC_MESSAGES/
+│   └── kk/LC_MESSAGES/
+├── templates/
+│   ├── themes/partials/    # Переключатель тем (+)
+│   └── i18n/partials/      # Переключатель языков (+)
+└── ...
+```
 
 ### Технические детали
 
 **Зависимости:**
 - Не требует новых пакетов
-- Использует существующие: Django ORM, HTMX, Alpine.js
+- Использует: Django i18n, HTMX, Alpine.js, CSS Variables
 
 **Производительность:**
-- `select_related` для оптимизации запросов
-- Ограничение результатов (`[:20]`, `[:6]`)
-- Кэширование через Redis (опционально)
+- Ленивая загрузка переводов
+- CSS переменные для тем (без перерисовки)
+- Кэширование в cookie/sessions
 
 **Расширение:**
-- Для добавления новых типов поиска — обновить `api_search_view`
-- Для изменения алгоритма рекомендаций — модифицировать `get_user_recommendations`
+- Для добавления языка: создать `.po` файл в `locale/<lang>/`
+- Для новой темы: создать запись в админке Theme
+- Для перевода: `django-admin makemessages -l <lang>`
 
 ---
 

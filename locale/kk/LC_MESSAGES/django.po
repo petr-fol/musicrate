@@ -1,0 +1,213 @@
+# Қазақша аудармалар MusicRate үшін
+# Copyright (C) 2024 MusicRate
+# This file is distributed under the same license as the MusicRate package.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicRate 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Kazakh\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Main navigation
+msgid "MusicRate"
+msgstr "MusicRate"
+
+msgid "Search releases, artists, users..."
+msgstr "Релиздерді, орындаушыларды, пайдаланушыларды іздеу..."
+
+msgid "Search"
+msgstr "Іздеу"
+
+msgid "Profile"
+msgstr "Профиль"
+
+msgid "Settings"
+msgstr "Баптаулар"
+
+msgid "Themes"
+msgstr "Тақырыптар"
+
+msgid "Languages"
+msgstr "Тілдер"
+
+msgid "Logout"
+msgstr "Шығу"
+
+msgid "Login"
+msgstr "Кіру"
+
+# Homepage
+msgid "Rate music"
+msgstr "Музыканы бағала"
+
+msgid "By criteria"
+msgstr "Критерийлер бойынша"
+
+msgid "Share your opinion about releases, gain reputation and find like-minded people"
+msgstr "Релиздер туралы пікіріңізді бөлісіңіз, бедел жинаңыз және единомышленниктер табыңыз"
+
+msgid "Releases"
+msgstr "Релиздер"
+
+msgid "Evaluation criteria"
+msgstr "Бағалау критерийлері"
+
+msgid "Max score"
+msgstr "Максималды балл"
+
+msgid "Opinions"
+msgstr "Пікірлер"
+
+msgid "Recommended for you"
+msgstr "Сізге ұсынылады"
+
+msgid "Based on your ratings"
+msgstr "Сіздің бағалауларыңыз бойынша"
+
+msgid "Latest releases"
+msgstr "Соңғы релиздер"
+
+msgid "Add release"
+msgstr "Релиз қосу"
+
+msgid "No releases yet"
+msgstr "Релиздер жоқ"
+
+msgid "Be the first to add a release from Yandex.Music"
+msgstr "Яндекс.Музыка-дан алғашқы релизді қосыңыз"
+
+msgid "Find release"
+msgstr "Релизді табу"
+
+msgid "Rate"
+msgstr "Бағалау"
+
+# Release detail
+msgid "Reviews"
+msgstr "Пікірлер"
+
+msgid "Average ratings by criteria"
+msgstr "Критерийлер бойынша орташа бағалар"
+
+msgid "You have already rated"
+msgstr "Сіз бағаладыңыз"
+
+msgid "Login to rate"
+msgstr "Бағалау үшін кіріңіз"
+
+msgid "Rate release"
+msgstr "Релизді бағалау"
+
+msgid "No reviews yet"
+msgstr "Пікірлер жоқ"
+
+msgid "Be the first to rate this release"
+msgstr "Алғашқы болып осы релизді бағалаңыз"
+
+# Criteria
+msgid "Rhymes"
+msgstr "Рифмалар"
+
+msgid "Structure"
+msgstr "Құрылым"
+
+msgid "Style"
+msgstr "Стиль"
+
+msgid "Charisma"
+msgstr "Харизма"
+
+msgid "Atmosphere"
+msgstr "Атмосфера"
+
+# Add review
+msgid "Criteria evaluation (1-10)"
+msgstr "Критерийлерді бағалау (1-10)"
+
+msgid "Review text"
+msgstr "Пікір мәтіні"
+
+msgid "Write your review (minimum 100 characters)..."
+msgstr "Пікіріңізді жазыңыз (минимум 100 таңба)..."
+
+msgid "Minimum 100 characters"
+msgstr "Минимум 100 таңба"
+
+msgid "characters"
+msgstr "таңба"
+
+msgid "Submit review"
+msgstr "Пікірді жіберу"
+
+msgid "Cancel"
+msgstr "Болдырмау"
+
+# Artist
+msgid "Albums"
+msgstr "Альбомдар"
+
+msgid "EP"
+msgstr "EP"
+
+msgid "Singles"
+msgstr "Синглдер"
+
+msgid "No releases"
+msgstr "Релиздер жоқ"
+
+msgid "Be the first to add a release by this artist"
+msgstr "Осы орындаушының алғашқы релизін қосыңыз"
+
+msgid "Find releases"
+msgstr "Релиздерді табу"
+
+msgid "Listen on Yandex.Music"
+msgstr "Яндекс.Музыка-да тыңдау"
+
+# Profile
+msgid "Reputation points"
+msgstr "Репутация ұпайлары"
+
+msgid "Last rating"
+msgstr "Соңғы бағалау"
+
+msgid "User reviews"
+msgstr "Пайдаланушы пікірлері"
+
+msgid "No user reviews yet"
+msgstr "Пайдаланушы пікірлері жоқ"
+
+msgid "Read more"
+msgstr "Толығырақ оқу"
+
+# Messages
+msgid "Your review has been successfully added!"
+msgstr "Пікіріңіз сәтті қосылды!"
+
+msgid "You have already left a review for this release."
+msgstr "Сіз бұл релизге пікір қалдырдыңыз."
+
+msgid "Release successfully imported!"
+msgstr "Релиз сәтті импортталды!"
+
+msgid "Failed to import release."
+msgstr "Релизді импорттау сәтсіз аяқталды."
+
+# Theme types
+msgid "Dark"
+msgstr "Қараңғы"
+
+msgid "Light"
+msgstr "Жарық"
+
+# Footer
+msgid "Music rating platform. Analog of RisaZaTvorchestvo."
+msgstr "Музыканы бағалау платформасы. RisaZaTvorchestvo аналогы."

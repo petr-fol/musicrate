@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(timeout *)",
+      "Bash(docker-compose *)",
+      "Bash(docker ps)",
+      "Bash(dir *)",
+      "Bash(type *)",
+      "Bash(docker stop *)",
+      "Bash(curl *)",
+      "Bash(python *)",
+      "Bash(venv\\scripts\\activate)",
+      "Bash(set *)",
+      "Bash(findstr *)",
+      "Bash(git add *)",
+      "Bash(git restore *)",
+      "Bash(git checkout *)",
+      "Bash(docker start *)",
+      "Bash(netstat *)"
+    ]
+  },
+  "$version": 3
+}

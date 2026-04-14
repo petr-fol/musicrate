@@ -47,7 +47,45 @@ docker-compose exec web python manage.py createsuperuser
 - Приложение: http://localhost:8000
 - Админка: http://localhost:8000/admin
 
-## Формула расчёта
+## Деплой на Render (бесплатно)
+
+### Автоматический деплой через render.yaml
+
+1. **Залейте проект на GitHub** (если ещё не залит):
+   ```bash
+   git add .
+   git commit -m "Add Render deployment config"
+   git push origin main
+   ```
+
+2. **Перейдите на [render.com](https://render.com)**:
+   - Зарегистрируйтесь/войдите через GitHub
+   - Нажмите **"New +"** → **"Blueprint"**
+   - Выберите репозиторий `musicrate`
+   - Нажмите **"Apply"**
+
+3. **Готово!** Render автоматически создаст:
+   - Веб-сервис (Django + Gunicorn)
+   - PostgreSQL базу данных
+   - Redis для Celery
+
+4. **Создайте суперпользователя**:
+   - Перейдите в Dashboard → ваш сервис → **"Shell"**
+   - Выполните: `python manage.py createsuperuser`
+
+5. **Доступ к приложению**:
+   - URL вида: `https://musicrate.onrender.com`
+   - Админка: `https://musicrate.onrender.com/admin`
+
+### Примечания
+
+- Бесплатный тариф: сервис "засыпает" после 15 минут неактивности
+- Первый запрос после "сна" занимает ~30 секунд
+- Для постоянного доступа используйте платный тариф ($7/мес)
+
+---
+
+## Деплой на Railway
 
 ```
 Total = (Rhymes + Structure + Style + Charisma) + Atmosphere

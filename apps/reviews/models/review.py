@@ -9,14 +9,14 @@ User = get_user_model()
 class Review(models.Model):
     """
     Модель рецензии на релиз.
-    
+
     Оценка производится по 5 критериям:
     - Рифмы (1-10)
     - Структура (1-10)
     - Стиль (1-10)
     - Харизма (1-10)
     - Атмосфера (1-5)
-    
+
     Максимальный балл: 45
     """
     user = models.ForeignKey(
@@ -62,9 +62,11 @@ class Review(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 
     total_score = models.PositiveSmallIntegerField(
         editable=False,
+        default=0,
         verbose_name='Итоговый балл'
     )
 

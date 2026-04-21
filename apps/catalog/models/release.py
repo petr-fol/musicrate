@@ -77,10 +77,11 @@ class Release(TimestampMixin):
 
     def update_average_score(self):
         """Пересчитать средний балл релиза на основе рецензий"""
+        from decimal import Decimal
         reviews = self.reviews.all()
         if reviews.exists():
             avg = sum(r.total_score for r in reviews) / reviews.count()
-            self.average_score = round(avg, 2)
+            self.average_score = Decimal(str(round(avg, 2)))
             self.save(update_fields=['average_score'])
 
     @property

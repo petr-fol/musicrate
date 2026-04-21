@@ -11,7 +11,12 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me')
 
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+allowed_hosts_env = os.getenv('ALLOWED_HOSTS', '*') or '*'
+allowed_hosts_env = allowed_hosts_env.strip()
+if allowed_hosts_env == '*' or allowed_hosts_env == '':
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
 
 # Application definition
 DJANGO_APPS = [

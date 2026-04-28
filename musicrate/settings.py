@@ -7,16 +7,28 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me')
+# Определяем окружение
+IS_RENDER = os.getenv('RENDER') == 'true'
 
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+# SECRET_KEY - используем переменную окружения или генерируем для разработки
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-this-should-be-changed-in-production-12345678901234567890')
 
-allowed_hosts_env = os.getenv('ALLOWED_HOSTS', '*') or '*'
-allowed_hosts_env = allowed_hosts_env.strip()
-if allowed_hosts_env == '*' or allowed_hosts_env == '':
-    ALLOWED_HOSTS = ['*']
+# DEBUG режим
+if IS_RENDER:
+    DEBUG = False
 else:
-    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
+    DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+
+# ALLOWED_HOSTS - автоматически для Render
+if IS_RENDER:
+    ALLOWED_HOSTS = ['*.onrender.com']
+else:
+    allowed_hosts_env = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1') or 'localhost,127.0.0.1'
+    allowed_hosts_env = allowed_hosts_env.strip()
+    if allowed_hosts_env == '*' or allowed_hosts_env == '':
+        ALLOWED_HOSTS = ['*']
+    else:
+        ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
 
 # Application definition
 DJANGO_APPS = [
@@ -171,25 +183,24 @@ YANDEX_MUSIC_TOKEN = os.getenv('YANDEX_MUSIC_TOKEN', '')
 # Security and Production Settings for Render
 CSRF_TRUSTED_ORIGINS = []
 
-# CSRF Configuration - работает везде (и локально, и на сервере)
-render_domain = os.getenv('RENDER_EXTERNAL_URL', '').replace('https://', '').replace('http://', '')
-if render_domain:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{render_domain}')
+# Автоматическая конфигурация CSRF для Render
+if IS_RENDER:
+    # На Render - хардкодим Render домены
+    CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+else:
+    # Локально - добавляем localhost
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+    ]
 
-# Добавляем любые дополнительные домены из переменной окружения
+# Если явно указаны в переменной окружения - добавляем
 extra_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
 if extra_origins:
-    CSRF_TRUSTED_ORIGINS.extend([o.strip() for o in extra_origins.split(',')])
+    CSRF_TRUSTED_ORIGINS.extend([o.strip() for o in extra_origins.split(',') if o.strip()])
 
-# Добавляем локальные домены для разработки
-if DEBUG or not CSRF_TRUSTED_ORIGINS:
-    if 'http://localhost:8000' not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append('http://localhost:8000')
-    if 'http://127.0.0.1:8000' not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append('http://127.0.0.1:8000')
-
-# Production-only security settings
-if not DEBUG:
+# Production-only security settings (включены на Render)
+if IS_RENDER or not DEBUG:
     # HTTPS/SSL Configuration
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True

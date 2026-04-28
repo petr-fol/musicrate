@@ -169,6 +169,26 @@ CELERY_TIMEZONE = TIME_ZONE
 YANDEX_MUSIC_TOKEN = os.getenv('YANDEX_MUSIC_TOKEN', '')
 
 # Security and Production Settings for Render
+CSRF_TRUSTED_ORIGINS = []
+
+# CSRF Configuration - работает везде (и локально, и на сервере)
+render_domain = os.getenv('RENDER_EXTERNAL_URL', '').replace('https://', '').replace('http://', '')
+if render_domain:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{render_domain}')
+
+# Добавляем любые дополнительные домены из переменной окружения
+extra_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+if extra_origins:
+    CSRF_TRUSTED_ORIGINS.extend([o.strip() for o in extra_origins.split(',')])
+
+# Добавляем локальные домены для разработки
+if DEBUG or not CSRF_TRUSTED_ORIGINS:
+    if 'http://localhost:8000' not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append('http://localhost:8000')
+    if 'http://127.0.0.1:8000' not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append('http://127.0.0.1:8000')
+
+# Production-only security settings
 if not DEBUG:
     # HTTPS/SSL Configuration
     SECURE_SSL_REDIRECT = True
@@ -190,16 +210,3 @@ if not DEBUG:
     
     # Proxy Headers (важно для Render)
     SECURE_PROXY_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    
-    # CSRF Configuration for Render
-    # Динамически добавляем домен Render если установлена переменная
-    render_domain = os.getenv('RENDER_EXTERNAL_URL', '').replace('https://', '').replace('http://', '')
-    CSRF_TRUSTED_ORIGINS = []
-    
-    if render_domain:
-        CSRF_TRUSTED_ORIGINS.append(f'https://{render_domain}')
-    
-    # Добавляем любые дополнительные домены из переменной окружения
-    extra_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
-    if extra_origins:
-        CSRF_TRUSTED_ORIGINS.extend([o.strip() for o in extra_origins.split(',')])

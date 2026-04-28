@@ -167,3 +167,39 @@ CELERY_TIMEZONE = TIME_ZONE
 
 # Yandex Music
 YANDEX_MUSIC_TOKEN = os.getenv('YANDEX_MUSIC_TOKEN', '')
+
+# Security and Production Settings for Render
+if not DEBUG:
+    # HTTPS/SSL Configuration
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_SECURITY_POLICY = {
+        'default-src': ("'self'",),
+        'script-src': ("'self'", "'unsafe-inline'"),
+        'style-src': ("'self'", "'unsafe-inline'"),
+        'img-src': ("'self'", 'data:', 'https:'),
+        'font-src': ("'self'",),
+    }
+    
+    # HSTS Configuration
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Proxy Headers (важно для Render)
+    SECURE_PROXY_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # CSRF Configuration for Render
+    # Динамически добавляем домен Render если установлена переменная
+    render_domain = os.getenv('RENDER_EXTERNAL_URL', '').replace('https://', '').replace('http://', '')
+    CSRF_TRUSTED_ORIGINS = []
+    
+    if render_domain:
+        CSRF_TRUSTED_ORIGINS.append(f'https://{render_domain}')
+    
+    # Добавляем любые дополнительные домены из переменной окружения
+    extra_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+    if extra_origins:
+        CSRF_TRUSTED_ORIGINS.extend([o.strip() for o in extra_origins.split(',')])
